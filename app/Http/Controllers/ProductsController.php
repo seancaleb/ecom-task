@@ -73,6 +73,6 @@ class ProductsController extends Controller {
     public function destroy(Product $product) {
         $product->delete();
 
-        return to_route('product.index', $product)->with('message', 'Product was deleted');
+        return to_route('products.index', $product)->with('message', 'Product was deleted');
     }
 }
