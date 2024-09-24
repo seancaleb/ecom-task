@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    a {
+        @apply no-underline !important;
+    }
+}
+
+@layer components {
+    .heading {
+        @apply text-3xl font-medium tracking-[-0.015em] text-gray-700;
+    }
+
+    .button {
+    }
+}
