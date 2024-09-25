@@ -2,6 +2,7 @@
     use Carbon\Carbon;
 
     $formatted_date = Carbon::parse($product->created_at)->format('M d, Y');
+    $formatted_price = number_format($product->price, 0, '.', ',');
 @endphp
 
 <x-app-layout>
@@ -10,7 +11,8 @@
             <div class="card-body">
                 <div>
                     <h1 class="heading">{{ $product->name }}</h1>
-                    <span >Date created: <span class="badge text-bg-primary">{{ $formatted_date }}</span></span>
+                    <h2 class="heading text-2xl">₱{{ $formatted_price }}</h2>
+                    <span class="badge text-bg-primary">{{ $formatted_date }}</span>
                 </div>
     
                 <hr>
@@ -20,11 +22,11 @@
                     <div>{{ $product->description }}</div>
     
                     <div class="flex gap-2">
-                        <a href="{{ route('products.edit', $product) }}" class="btn btn-primary">Edit</a>
+                        <x-primary-link href="{{ route('products.edit', $product) }}">{{ __('Edit') }}</x-primary-link>
                         <form action="{{ route('products.destroy', $product) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger">Delete</button>
+                            <x-primary-button class='bg-red-700 hover:bg-red-600'>{{ __('Delete') }}</x-primary-button>
                         </form>
                     </div>
                 </div>

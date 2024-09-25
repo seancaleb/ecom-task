@@ -11,14 +11,7 @@ class ProductsController extends Controller {
      * Display a listing of the resource.
      */
     public function index(ProductsDataTable $dataTable) {
-
-        $products = Product::query()
-            ->where('user_id', request()->user()->id)
-            ->orderBy("created_at", "desc")
-            ->paginate(5);
-
-        return view('products.index', data: ['products' => $products]);
-        // return $dataTable->render('products.index', data: ['products' => $products]);
+        return $dataTable->render('products.index');
     }
 
     /**

@@ -6,6 +6,23 @@
     a {
         @apply no-underline !important;
     }
+
+    table,
+    thead,
+    tbody,
+    th,
+    tr,
+    td {
+        @apply text-slate-800 !important;
+    }
+
+    td {
+        @apply p-4 !important;
+    }
+
+    th {
+        @apply text-sm font-semibold px-4 !important;
+    }
 }
 
 @layer components {
@@ -13,6 +30,11 @@
         @apply text-3xl font-medium tracking-[-0.015em] text-gray-700;
     }
 
-    .button {
+    .primary-link {
+        @apply inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+    }
+
+    .primary-btn {
+        @apply inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
     }
 }

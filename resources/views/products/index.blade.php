@@ -1,5 +1,13 @@
 @php
     use Carbon\Carbon;
+
+    function formatDate($date) {
+        return Carbon::parse($date)->format('m/d/y');
+    }
+
+    function formatPrice($price) {
+        return number_format($price, 0, '.', ',');
+    }
 @endphp
 
 {{-- @extends('layouts.app') --}}
@@ -11,7 +19,7 @@
             <div class="card-header">Manage Products</div>
             <div class="card-body">
                 {{-- {{ $dataTable->table() }} --}}
-                <a href="{{ route('products.create') }}" class="btn btn-primary mb-2">+ New product</a>
+                <x-primary-link href="{{ route('products.create') }}" class="mb-2">+ New product</x-primary-link>
 
                 <table id='products-table'>
                     <thead>
@@ -23,28 +31,28 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         @foreach ($products as $product)
-                            <tr>
+                            <tr onclick="location.href='{{ route('products.show', $product) }}'" class='cursor-pointer'>
                                 <td>
                                     <div class="whitespace-nowrap">{{ $product->name }}</div>
                                 </td>
                                 <td>{{ Str::words($product->description, 30) }}</td>
-                                <td>₱{{ number_format($product->price, 0, '.', ',') }}</td>
-                                <td>{{ Carbon::parse($product->created_at)->format('m/d/y') }}</td>
+                                <td>₱{{ formatPrice($product->price) }}</td>
+                                <td><div class="badge bg-primary">{{ formatDate($product->created_at) }}</div></td>
                                 <td>
                                     <div class='flex gap-2'>
-                                        <a href="{{ route('products.edit', $product) }}" class="btn btn-primary">Edit</a>
+                                        <x-primary-link href="{{ route('products.edit', $product) }}">{{ __('Edit') }}</x-primary-link>
                                         <form action="{{ route('products.destroy', $product) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger">Delete</button>
+                                            <x-primary-button class='bg-red-700 hover:bg-red-600'>{{ __('Delete') }}</x-primary-button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
             </div>
         </div>
@@ -56,7 +64,6 @@
 {{-- @endsection --}}
 
 <script type='text/javascript'>
-    console.log("test");
     $(document).ready(function() {
         $('#products-table').DataTable({
             processing: true,
@@ -67,6 +74,53 @@
                 {data: 'description', name: 'description'},
                 {data: 'price', name: 'price'},
                 {data: 'created_at', name: 'created_at'},
+                {data: 'actions', name: 'actions'},
+            ],
+            "rowCallback": function( row, data, dataIndex ) {
+                let productId = data.id; 
+                let url = `/products/${productId}`; 
+
+                $(row).attr('onclick', `location.href='${url}'`);
+                $(row).addClass('cursor-pointer');
+            },
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function(data, type, row) {
+                        return '<span class="whitespace-nowrap">' + data + '</span>';
+                    }
+                },
+                {
+                    targets: 1,
+                    render: function(data, type, row) {
+                        return data;
+                    }
+                },
+                {
+                    targets: 2,
+                    render: function(data, type, row) {
+                        return '₱' + data;
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function(data, type, row) {
+                        return '<div class="badge bg-primary">' + data + '</div>';
+                    }
+                },
+               {
+                    targets: 4,
+                    render: function(data, type, row) {
+                        return `<div class='flex gap-2'>
+                                    <a class="primary-link" href="${data[0]}">{{ __('Edit') }}</a>
+                                    <form action="${data[1]}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class='primary-btn bg-red-700 hover:bg-red-600'>{{ __('Delete') }}</button>
+                                    </form>
+                                </div>`;
+                    }
+               }
             ]
         })
     })

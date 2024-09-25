@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Str;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -19,8 +20,29 @@ class ProductsDataTable extends DataTable {
      * @param QueryBuilder $query Results from query() method.
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable {
+        $query->where('user_id', request()->user()->id);
+
         return (new EloquentDataTable($query))
             ->addColumn('action', 'products.action')
+            ->addColumn('description', function ($product) {
+                $formatted_description = wordwrap($product->description, 50, "\n", true);
+                $lines = explode("\n", $formatted_description);
+                $truncated_description = implode("\n", array_slice($lines, 0, 2));
+                return "{$truncated_description}...";
+            })
+            ->addColumn('price', function ($product) {
+                return number_format($product->price, 0, '.', ',');
+            })
+            ->addColumn('created_at', function ($product) {
+                $formattedDate = $product->created_at->format('Y-m-d');
+                return $formattedDate;
+            })
+            ->addColumn('actions', content: function ($product) {
+                $editLink = route('products.edit', $product);
+                $deleteFormAction = route('products.destroy', $product);
+
+                return [$editLink, $deleteFormAction];
+            })
             ->setRowId('id');
     }
 

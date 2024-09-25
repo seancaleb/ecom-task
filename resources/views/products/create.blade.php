@@ -24,9 +24,9 @@
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
 
-                    <div>
-                        <a href="{{ route('products.index') }}" class='btn'>Cancel</a>
-                        <button class='btn btn-primary'>Add product</button>
+                    <div class='flex gap-2'>
+                        <x-secondary-link href="{{ route('products.index') }}">{{ __('Cancel') }}</x-secondary-link>
+                        <x-primary-button>{{ __('Add product') }}</x-primary-button>
                     </div>
                 </form>
             </div>
